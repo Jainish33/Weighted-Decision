@@ -1,18 +1,5 @@
-import type { Calibration, Currency, Quadrant, Scores } from "@/types";
-
-export const EFFORT_WEIGHTS = {
-  time: 0.3,
-  capital: 0.25,
-  skill: 0.25,
-  dependency: 0.2,
-} as const;
-
-export const IMPACT_WEIGHTS = {
-  revenue: 0.35,
-  market: 0.25,
-  strategic: 0.25,
-  fit: 0.15,
-} as const;
+import type { Calibration, Currency, Quadrant, Scores, Weights } from "@/types";
+import { DEFAULT_WEIGHTS } from "@/types";
 
 export function formatCurrency(value: number, currency: Currency): string {
   const symbol = currency === "INR" ? "₹" : "$";
@@ -244,26 +231,27 @@ export const SUB_FACTORS: SubFactor[] = [
 ];
 
 // Convert a weighted 1..5 sum into 0..100.
-// Min weighted sum = 1, max = 5 => normalize (x - 1) / 4 * 100.
+// Weights are percentages (e.g. 30) that sum to 100.
+// Weighted sum range: 1..5 => normalize (x - 1) / 4 * 100.
 function normalize(weightedSum: number): number {
   return Math.round(((weightedSum - 1) / 4) * 100);
 }
 
-export function computeEffort(scores: Scores): number {
+export function computeEffort(scores: Scores, w: Weights["effort"] = DEFAULT_WEIGHTS.effort): number {
   const sum =
-    scores.time * EFFORT_WEIGHTS.time +
-    scores.capital * EFFORT_WEIGHTS.capital +
-    scores.skill * EFFORT_WEIGHTS.skill +
-    scores.dependency * EFFORT_WEIGHTS.dependency;
+    scores.time * (w.time / 100) +
+    scores.capital * (w.capital / 100) +
+    scores.skill * (w.skill / 100) +
+    scores.dependency * (w.dependency / 100);
   return normalize(sum);
 }
 
-export function computeImpact(scores: Scores): number {
+export function computeImpact(scores: Scores, w: Weights["impact"] = DEFAULT_WEIGHTS.impact): number {
   const sum =
-    scores.revenue * IMPACT_WEIGHTS.revenue +
-    scores.market * IMPACT_WEIGHTS.market +
-    scores.strategic * IMPACT_WEIGHTS.strategic +
-    scores.fit * IMPACT_WEIGHTS.fit;
+    scores.revenue * (w.revenue / 100) +
+    scores.market * (w.market / 100) +
+    scores.strategic * (w.strategic / 100) +
+    scores.fit * (w.fit / 100);
   return normalize(sum);
 }
 
@@ -285,9 +273,9 @@ export interface ComputedResult {
   quadrant: Quadrant;
 }
 
-export function computeAll(scores: Scores): ComputedResult {
-  const effortScore = computeEffort(scores);
-  const impactScore = computeImpact(scores);
+export function computeAll(scores: Scores, weights: Weights = DEFAULT_WEIGHTS): ComputedResult {
+  const effortScore = computeEffort(scores, weights.effort);
+  const impactScore = computeImpact(scores, weights.impact);
   return {
     effortScore,
     impactScore,

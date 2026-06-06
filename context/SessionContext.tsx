@@ -84,21 +84,24 @@ export function SessionProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const setScores = useCallback((id: string, scores: Scores) => {
-    const result = computeAll(scores);
-    setSession((s) => ({
-      ...s,
-      ideas: s.ideas.map((i) =>
-        i.id === id
-          ? {
-              ...i,
-              scores,
-              effortScore: result.effortScore,
-              impactScore: result.impactScore,
-              quadrant: result.quadrant,
-            }
-          : i
-      ),
-    }));
+    setSession((s) => {
+      const weights = s.calibration?.weights;
+      const result = computeAll(scores, weights);
+      return {
+        ...s,
+        ideas: s.ideas.map((i) =>
+          i.id === id
+            ? {
+                ...i,
+                scores,
+                effortScore: result.effortScore,
+                impactScore: result.impactScore,
+                quadrant: result.quadrant,
+              }
+            : i
+        ),
+      };
+    });
   }, []);
 
   const setStep = useCallback((step: Step) => {

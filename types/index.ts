@@ -8,11 +8,22 @@ export type Quadrant =
 
 export type Step = "calibration" | "ideas" | "scoring" | "matrix" | "report";
 
+export interface Weights {
+  effort: { time: number; capital: number; skill: number; dependency: number };
+  impact: { revenue: number; market: number; strategic: number; fit: number };
+}
+
+export const DEFAULT_WEIGHTS: Weights = {
+  effort: { time: 30, capital: 25, skill: 25, dependency: 20 },
+  impact: { revenue: 35, market: 25, strategic: 25, fit: 15 },
+};
+
 export interface Calibration {
   capitalCeiling: number;
   timeCeiling: number;
   impactCeiling: number;
   currency: Currency;
+  weights: Weights;
 }
 
 export interface Scores {

@@ -128,5 +128,82 @@ export async function exportReportPDF({
     }
   );
 
+  // Weights used
+  if (calibration.weights) {
+    y += 14;
+    ensureSpace(120);
+    line("Weights Used in This Analysis", 14, true);
+    y += 4;
+    line("Effort Factors", 11, true);
+    const ew = calibration.weights.effort;
+    line(`  Time to validate: ${ew.time}%  |  Capital required: ${ew.capital}%  |  Skill / team gap: ${ew.skill}%  |  Dependencies: ${ew.dependency}%`, 10);
+    y += 6;
+    line("Impact Factors", 11, true);
+    const iw = calibration.weights.impact;
+    line(`  Revenue potential: ${iw.revenue}%  |  Market size / demand: ${iw.market}%  |  Strategic value: ${iw.strategic}%  |  Founder fit: ${iw.fit}%`, 10);
+  }
+
+  // Glossary
+  y += 20;
+  ensureSpace(40);
+  line("How to Read This Report", 14, true);
+  y += 4;
+
+  const glossary: { term: string; definition: string }[] = [
+    {
+      term: "The Matrix",
+      definition:
+        "Each dot is one of your ideas plotted on Effort (horizontal) and Impact (vertical). The dividing lines sit at the midpoint of your personal scale — so 'high' and 'low' are relative to your own ceilings, not a universal standard.",
+    },
+    {
+      term: "Effort Score (0–100)",
+      definition:
+        "A weighted composite of: time to validate, capital required, skill/team gap, and external dependencies. Higher = more effort needed.",
+    },
+    {
+      term: "Impact Score (0–100)",
+      definition:
+        "A weighted composite of: revenue potential, market demand clarity, strategic value, and founder fit. Higher = greater potential return. Scores are relative to your personal impact ceiling.",
+    },
+    {
+      term: "Calibration Anchors",
+      definition:
+        "The ceilings you set at the start. They define what 'high' means for you. Two people scoring the same idea can get different results — that's intentional. This framework measures ideas against your reality.",
+    },
+    {
+      term: "Weights",
+      definition:
+        "The percentage contribution of each sub-factor to its composite score. A factor with a higher weight has more influence on where your idea lands on the matrix.",
+    },
+    {
+      term: "Gold Mine (low effort, high impact)",
+      definition: "Your best opportunities. Act on these first.",
+    },
+    {
+      term: "Moon Shot (high effort, high impact)",
+      definition: "Worth pursuing with the right resources and timing. Plan carefully before committing.",
+    },
+    {
+      term: "Quick Win (low effort, low impact)",
+      definition: "Easy to do but limited upside. Pursue when you have spare bandwidth.",
+    },
+    {
+      term: "Questionable (high effort, low impact)",
+      definition: "Drain resources without proportionate return. Reconsider before committing.",
+    },
+    {
+      term: "Important Caveat",
+      definition:
+        "This analysis reflects your current knowledge and intuition. Scores on market demand and founder fit are especially subjective. Use this as a starting point for deeper thinking, not a final verdict.",
+    },
+  ];
+
+  glossary.forEach(({ term, definition }) => {
+    ensureSpace(40);
+    line(term, 10, true);
+    line(definition, 10);
+    y += 4;
+  });
+
   doc.save("idea-quadrant-report.pdf");
 }

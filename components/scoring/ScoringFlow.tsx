@@ -143,8 +143,8 @@ export default function ScoringFlow() {
 
         <div className="lg:sticky lg:top-6 lg:self-start">
           <MiniMatrix
-            effort={hasAny ? computeEffort(previewScores) : null}
-            impact={hasAny ? computeImpact(previewScores) : null}
+            effort={hasAny ? computeEffort(previewScores, cal.weights?.effort) : null}
+            impact={hasAny ? computeImpact(previewScores, cal.weights?.impact) : null}
           />
           <p className="mt-2 text-[11px] leading-snug text-slate-400">
             Unanswered factors assume a neutral value until you answer them.
