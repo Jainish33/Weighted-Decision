@@ -1,27 +1,29 @@
 import type { Config } from "tailwindcss";
 
 const config: Config = {
-  content: [
-    "./app/**/*.{js,ts,jsx,tsx,mdx}",
-    "./components/**/*.{js,ts,jsx,tsx,mdx}",
-  ],
+  content: ["./app/**/*.{ts,tsx}", "./components/**/*.{ts,tsx}"],
   theme: {
     extend: {
       colors: {
-        navy: "#0F172A",
-        "gold-mine": "#10B981",
-        "moon-shot": "#8B5CF6",
-        "quick-win": "#F59E0B",
-        questionable: "#F43F5E",
+        canvas: "#FAF7F2",
+        ink: "#1C1814",
+        burgundy: "#6B2737",
+        taupe: "#D8CFC4",
+        gold: "#B8975A",
+        charcoal: "#211C18",
+      },
+      fontFamily: {
+        serif: ["var(--font-fraunces)", "Georgia", "serif"],
+        sans: ["var(--font-inter)", "system-ui", "sans-serif"],
       },
       keyframes: {
-        fadeIn: {
-          "0%": { opacity: "0", transform: "translateY(8px)" },
+        fadeUp: {
+          "0%": { opacity: "0", transform: "translateY(10px)" },
           "100%": { opacity: "1", transform: "translateY(0)" },
         },
       },
       animation: {
-        fadeIn: "fadeIn 0.3s ease-out",
+        fadeUp: "fadeUp 0.5s ease-out both",
       },
     },
   },
