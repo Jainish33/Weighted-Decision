@@ -58,47 +58,151 @@ function Heart({ size = 22, color = "#6B2737" }: { size?: number; color?: string
   );
 }
 
-/* ---------- product mockups ---------- */
+// A small painted-leaf cluster for the botanical pages.
+function Leaves({ className = "" }: { className?: string }) {
+  return (
+    <svg className={className} width="56" height="40" viewBox="0 0 56 40" fill="none" aria-hidden>
+      <path d="M8 32 Q14 18 28 14 Q20 26 12 34 Z" fill="#8AA38D" opacity="0.8" />
+      <path d="M20 36 Q28 24 42 22 Q34 32 24 38 Z" fill="#3E5C45" opacity="0.6" />
+      <path d="M30 14 Q40 6 52 8 Q44 16 34 18 Z" fill="#8AA38D" opacity="0.55" />
+    </svg>
+  );
+}
 
-// The hardcover card cover — a Spotify-plaque style print for one person.
-function CardPlaque({ className = "" }: { className?: string }) {
+// QR sketch used on the printed song page.
+function QrSketch({ cell = 6 }: { cell?: number }) {
   return (
     <div
-      className={`w-60 rounded-2xl border border-taupe bg-white p-5 shadow-xl ${className}`}
+      className="grid gap-[1px]"
+      style={{ gridTemplateColumns: `repeat(6, ${cell}px)` }}
+      aria-hidden
     >
-      <div className="flex aspect-square items-center justify-center rounded-xl bg-gradient-to-br from-burgundy via-[#8a3a4d] to-gold">
-        <Heart size={44} color="#FAF7F2" />
-      </div>
-      <div className="mt-4 font-serif text-lg leading-tight text-ink">
-        Riya&rsquo;s Song
-      </div>
-      <div className="text-xs text-ink/50">written for exactly one person</div>
-      <div className="mt-3 h-1 w-full rounded-full bg-taupe">
-        <div className="h-1 w-2/3 rounded-full bg-ink" />
-      </div>
-      <div className="mt-1 flex justify-between text-[10px] text-ink/40">
-        <span>1:58</span>
-        <span>3:02</span>
-      </div>
-      <div className="mt-2 flex items-center justify-center gap-5 text-ink">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
-          <path d="M6 6h2v12H6zM9 12l10 6V6z" transform="scale(-1,1) translate(-24,0)" />
-        </svg>
-        <span className="flex h-8 w-8 items-center justify-center rounded-full bg-ink">
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="#FAF7F2" aria-hidden>
-            <path d="M8 5v14l11-7z" />
-          </svg>
-        </span>
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
-          <path d="M6 6h2v12H6zM9 12l10 6V6z" />
-        </svg>
-      </div>
+      {Array.from({ length: 36 }).map((_, i) => (
+        <span
+          key={i}
+          style={{ width: cell, height: cell }}
+          className={((i * 11) % 3) === 0 || i < 3 || i % 6 === 0 ? "bg-ink/80" : "bg-ink/10"}
+        />
+      ))}
     </div>
   );
 }
 
-// The recipient page, previewed in a phone frame. The heart is real:
-// tap it and the page says what it always says.
+/* ---------- the cover: painted, scripted, played ---------- */
+
+const QUALITIES = [
+  { word: "Uplifting", line: "you make us better" },
+  { word: "Warm-hearted", line: "pure, honest magic" },
+  { word: "Radiant", line: "light in our lives" },
+  { word: "Compassionate", line: "the heart of us" },
+];
+
+function CardCover({ className = "" }: { className?: string }) {
+  return (
+    <div
+      className={`w-[21rem] rounded-xl border border-taupe bg-cream p-4 shadow-2xl md:w-[24rem] ${className}`}
+    >
+      <div className="relative z-10 -mb-4 text-center font-script text-4xl text-ink">
+        Happy Birthday
+      </div>
+
+      {/* the painting */}
+      <div
+        className="relative h-52 overflow-hidden rounded-lg"
+        style={{
+          background:
+            "linear-gradient(155deg,#88a7c2 0%,#9db89a 28%,#5f9163 55%,#3c6b45 82%)",
+        }}
+      >
+        {/* brush-stroke texture */}
+        <div
+          className="absolute inset-0 opacity-20"
+          style={{
+            backgroundImage:
+              "repeating-linear-gradient(112deg, rgba(255,255,255,0.35) 0 2px, transparent 2px 9px), repeating-linear-gradient(75deg, rgba(20,40,20,0.25) 0 1px, transparent 1px 12px)",
+          }}
+        />
+        {/* frosted player panel */}
+        <div className="absolute bottom-3 left-[6.5rem] right-3 top-3 rounded-lg bg-cream/20 backdrop-blur-[1.5px]" />
+
+        {/* circular photo */}
+        <div
+          className="absolute left-12 top-1/2 z-10 flex h-20 w-20 -translate-y-1/2 items-center justify-center rounded-full border-2 border-cream/80 text-center text-[8px] leading-tight text-cream/90 shadow-lg"
+          style={{ background: "radial-gradient(circle at 35% 30%, #6b5a48, #2c241c)" }}
+        >
+          the two
+          <br />
+          of you
+        </div>
+
+        {/* vertical player strip */}
+        <div className="absolute left-[8.7rem] top-1/2 z-10 flex -translate-y-1/2 flex-col items-center gap-2 text-cream">
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
+            <path d="M4 17h3l4-5-4-5H4l4 5zm9-10 4 5-4 5h3l4-5-4-5z" />
+          </svg>
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
+            <path d="M6 6h2v12H6zM18 6l-8 6 8 6z" />
+          </svg>
+          <span className="flex h-9 w-9 items-center justify-center rounded-full bg-cream">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="#3E5C45" aria-hidden>
+              <path d="M8 5v14l11-7z" />
+            </svg>
+          </span>
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
+            <path d="M16 6h2v12h-2zM6 6l8 6-8 6z" />
+          </svg>
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
+            <path d="M7 7h10v3l4-4-4-4v3H5v6h2zm10 10H7v-3l-4 4 4 4v-3h12v-6h-2z" />
+          </svg>
+        </div>
+
+        {/* song title, sideways like the print */}
+        <div
+          className="absolute left-[11.2rem] top-1/2 z-10 -translate-y-1/2 text-[8px] uppercase tracking-[0.2em] text-cream/90"
+          style={{ writingMode: "vertical-rl", transform: "translateY(-50%) rotate(180deg)" }}
+        >
+          beautiful soul · their song
+        </div>
+
+        {/* the four qualities */}
+        <div className="absolute right-4 top-1/2 z-10 flex -translate-y-1/2 gap-3">
+          {QUALITIES.map((q) => (
+            <div key={q.word} className="flex flex-col items-center gap-1.5">
+              <div
+                className="flex gap-1"
+                style={{ writingMode: "vertical-rl", transform: "rotate(180deg)" }}
+              >
+                <span className="text-[9px] font-semibold tracking-wide text-cream">
+                  {q.word}
+                </span>
+                <span className="text-[7px] text-cream/75">{q.line}</span>
+              </div>
+              <span
+                className="h-7 w-7 rounded-[3px] border border-cream/40"
+                style={{
+                  background:
+                    "linear-gradient(135deg, rgba(243,236,221,0.85), rgba(194,165,130,0.65))",
+                }}
+              />
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* TO, ____________ */}
+      <div className="mt-4 flex items-center gap-3 px-1">
+        <span className="text-[10px] tracking-[0.25em] text-ink/80">TO,</span>
+        <span className="h-px flex-1 bg-ink/70" />
+      </div>
+      <p className="mt-1.5 px-1 text-xs text-ink/55">
+        by the ones who love them
+      </p>
+    </div>
+  );
+}
+
+/* ---------- the personal page, in a phone ---------- */
+
 function PhonePreview({ className = "" }: { className?: string }) {
   const [whisper, setWhisper] = useState(false);
 
@@ -109,14 +213,14 @@ function PhonePreview({ className = "" }: { className?: string }) {
 
   return (
     <div
-      className={`w-64 rounded-[2.2rem] border border-ink/20 bg-charcoal p-5 pb-7 text-canvas shadow-2xl ${className}`}
+      className={`w-60 rounded-[2.2rem] border border-ink/20 bg-charcoal p-5 pb-6 text-canvas shadow-2xl ${className}`}
     >
       <div className="mx-auto mb-5 h-1 w-12 rounded-full bg-canvas/20" />
       <div className="text-[10px] uppercase tracking-[0.25em] text-gold">
-        for our favourite person
+        a page that belongs to
       </div>
-      <div className="mt-1 font-serif text-3xl">Riya</div>
-      <div className="text-xs text-canvas/50">listening since 2002</div>
+      <div className="mt-1 font-script text-4xl text-canvas">your person</div>
+      <div className="mt-1 text-xs text-canvas/50">listening since their birth year</div>
 
       <div className="relative mt-5 flex justify-center">
         <motion.button
@@ -125,7 +229,7 @@ function PhonePreview({ className = "" }: { className?: string }) {
           aria-label="tap the heart"
           className="rounded-full p-2"
         >
-          <Heart size={34} />
+          <Heart size={32} />
         </motion.button>
         <AnimatePresence>
           {whisper && (
@@ -141,57 +245,45 @@ function PhonePreview({ className = "" }: { className?: string }) {
         </AnimatePresence>
       </div>
 
-      <Waveform className="mt-4 justify-center" />
+      <Waveform className="mt-3 justify-center" bars={22} />
 
-      <div className="mt-5 rounded-xl bg-canvas/5 p-3 text-xs leading-relaxed text-canvas/70">
-        remember the rooftop chai, the night before results? you laughed first.
-        you always laugh first.
+      <div className="mt-4 rounded-xl bg-canvas/5 p-3 text-xs leading-relaxed text-canvas/70">
+        your words and photographs drift in, line by line, as the song plays
       </div>
-      <div className="mt-2 rounded-xl bg-canvas/5 p-3 text-xs leading-relaxed text-canvas/50">
-        happy birthday, our golden hour heart…
+
+      <div className="mt-4 rounded-full border border-canvas/15 px-3 py-1.5 text-center text-[9px] text-canvas/50">
+        heartstrings.gift/for/your-person
       </div>
     </div>
   );
 }
 
-function RfidPair({ className = "" }: { className?: string }) {
-  const titles = ["Golden Hour Heart", "Brave on Both Sides", "Confetti Weather"];
+/* ---------- the inner pages, in miniature ---------- */
+
+function Tape({ className = "" }: { className?: string }) {
   return (
-    <div className={`relative h-44 w-72 ${className}`} aria-hidden>
-      <div className="absolute left-8 top-3 w-56 -rotate-2 rounded-2xl bg-ink p-4 text-canvas opacity-60 shadow-lg" />
-      <div className="absolute left-0 top-0 w-56 rotate-2 rounded-2xl bg-charcoal p-4 text-canvas shadow-xl">
-        <div className="text-[9px] uppercase tracking-[0.25em] text-gold">
-          happy birthday
-        </div>
-        <div className="mt-0.5 font-serif text-base">Riya</div>
-        <ul className="mt-2.5 space-y-1.5">
-          {titles.map((t) => (
-            <li key={t} className="flex items-center gap-2 text-xs text-canvas/85">
-              <Heart size={10} /> {t}
-            </li>
-          ))}
-        </ul>
-        <div className="mt-3 flex items-center gap-1.5 text-[9px] text-canvas/40">
-          <span className="inline-block h-3 w-3 rounded-[3px] border border-canvas/40" />
-          tap or scan to listen
-        </div>
-      </div>
-    </div>
+    <span
+      className={`absolute h-3 w-10 rounded-[2px] bg-paper/90 opacity-80 shadow-sm ${className}`}
+      aria-hidden
+    />
   );
 }
-
-/* ---------- the four pages ---------- */
 
 function MiniPage({
   label,
   children,
+  bg,
 }: {
   label: string;
   children: React.ReactNode;
+  bg: string;
 }) {
   return (
     <motion.div {...reveal} className="flex flex-col">
-      <div className="flex aspect-[3/4] flex-col rounded-xl border border-taupe bg-white p-4 shadow-sm">
+      <div
+        className="relative flex aspect-[3/4] flex-col overflow-hidden rounded-xl border border-taupe p-4 shadow-sm"
+        style={{ background: bg }}
+      >
         {children}
       </div>
       <p className="mt-3 text-center text-xs text-ink/60">{label}</p>
@@ -202,73 +294,126 @@ function MiniPage({
 function PagesOfTheCard() {
   return (
     <div className="mx-auto mt-14 grid max-w-4xl grid-cols-2 gap-5 md:grid-cols-4">
-      <MiniPage label="page one — the two of you">
-        <div className="flex flex-1 items-center justify-center rounded-lg bg-gradient-to-br from-taupe/60 to-taupe/20 text-[10px] text-ink/40">
-          your photo together
-        </div>
-        <p className="mt-3 text-center font-serif text-sm">happy birthday, Riya</p>
-      </MiniPage>
-      <MiniPage label="page two — your memories">
-        <p className="font-serif text-xs">the rooftop chai</p>
-        <div className="mt-1.5 space-y-1">
-          {[82, 66, 78].map((w, i) => (
-            <div key={i} className="h-1 rounded-full bg-taupe" style={{ width: `${w}%` }} />
-          ))}
-        </div>
-        <p className="mt-3 font-serif text-xs">the wrong train, 2019</p>
-        <div className="mt-1.5 space-y-1">
-          {[80, 64, 72].map((w, i) => (
-            <div key={i} className="h-1 rounded-full bg-taupe" style={{ width: `${w}%` }} />
-          ))}
-        </div>
-        <p className="mt-3 font-serif text-xs">the quiet semester</p>
-        <div className="mt-1.5 space-y-1">
-          {[76, 58].map((w, i) => (
-            <div key={i} className="h-1 rounded-full bg-taupe" style={{ width: `${w}%` }} />
-          ))}
-        </div>
-      </MiniPage>
-      <MiniPage label="page three — her song">
-        <div className="flex flex-1 flex-col items-center justify-center gap-3">
-          <Heart size={26} />
-          <div className="flex h-5 items-center gap-[2px]">
-            {Array.from({ length: 14 }).map((_, i) => (
-              <span
-                key={i}
-                className="w-[2px] rounded-full bg-burgundy/60"
-                style={{ height: 4 + ((i * 29) % 14) }}
-              />
-            ))}
-          </div>
-          <div className="grid grid-cols-4 gap-[2px]" aria-hidden>
-            {Array.from({ length: 16 }).map((_, i) => (
-              <span
-                key={i}
-                className={`h-1.5 w-1.5 ${((i * 7) % 3) === 0 ? "bg-ink" : "bg-ink/15"}`}
-              />
-            ))}
-          </div>
-          <p className="text-center text-[9px] text-ink/40">
-            scan — the card knows the rest
+      {/* the greeting — watercolour botanicals */}
+      <MiniPage
+        label="the greeting, in watercolour"
+        bg="linear-gradient(160deg,#F6F8F0,#E7EFE2)"
+      >
+        <Leaves className="absolute -right-2 -top-1 rotate-12" />
+        <Leaves className="absolute -bottom-1 -left-2 rotate-[195deg]" />
+        <div className="flex flex-1 flex-col items-center justify-center text-center">
+          <p className="font-script text-2xl leading-snug text-forest">
+            Happy
+            <br />
+            Birthday
+          </p>
+          <p className="mt-2 text-[9px] tracking-[0.2em] text-forest/60">
+            THEIR NAME, HAND-SET
           </p>
         </div>
       </MiniPage>
-      <MiniPage label="page four — the unsaid thing">
-        <div className="space-y-1">
-          {[88, 70, 84, 60].map((w, i) => (
-            <div key={i} className="h-1 rounded-full bg-taupe" style={{ width: `${w}%` }} />
+
+      {/* the song, printed on aged paper with the QR */}
+      <MiniPage
+        label="their song — printed, scannable"
+        bg="linear-gradient(165deg,#F0E4C8,#E4D2A9)"
+      >
+        <p className="text-center font-serif text-[10px] text-ink/80">
+          Happy Birthday, dear you
+        </p>
+        <div className="mt-2 space-y-1.5">
+          <p className="font-serif text-[8px] italic leading-relaxed text-ink/60">
+            we&rsquo;ve seen each other break, we&rsquo;ve seen each other
+            bloom…
+          </p>
+          {[84, 70, 78, 56, 80, 64].map((w, i) => (
+            <div key={i} className="h-[3px] rounded-full bg-ink/15" style={{ width: `${w}%` }} />
+          ))}
+          <p className="font-serif text-[8px] italic leading-relaxed text-ink/60">
+            …we&rsquo;ll be there — with your favourite song.
+          </p>
+          {[74, 60].map((w, i) => (
+            <div key={i} className="h-[3px] rounded-full bg-ink/15" style={{ width: `${w}%` }} />
           ))}
         </div>
-        <p className="mt-3 text-right font-serif text-[10px] text-ink/60">— with everything, A.</p>
-        <div className="mt-auto grid grid-cols-3 gap-1.5">
-          {[0, 1, 2].map((i) => (
-            <div
-              key={i}
-              className="aspect-square rounded bg-gradient-to-br from-taupe/60 to-taupe/20"
-            />
-          ))}
+        <div className="mt-auto flex items-end justify-between">
+          <span className="text-[8px] italic text-ink/50">scan to hear it</span>
+          <QrSketch cell={5} />
         </div>
       </MiniPage>
+
+      {/* favourite memories — polaroids and tape */}
+      <MiniPage
+        label="favourite memories"
+        bg="linear-gradient(160deg,#D6C2A4,#C2A582)"
+      >
+        <p className="font-script text-xl text-ink/80">Favourite Memories</p>
+        <div className="relative mt-2 flex-1">
+          <div className="absolute left-1 top-1 w-20 -rotate-6 rounded-sm bg-white p-1.5 pb-4 shadow-md">
+            <div className="aspect-square rounded-[2px] bg-gradient-to-br from-sage/70 to-forest/50" />
+            <Tape className="-top-1.5 left-5 rotate-3" />
+          </div>
+          <div className="absolute right-0 top-6 w-20 rotate-6 rounded-sm bg-white p-1.5 pb-4 shadow-md">
+            <div className="aspect-square rounded-[2px] bg-gradient-to-br from-kraft to-paper" />
+            <Tape className="-top-1.5 right-4 -rotate-6" />
+          </div>
+          <div className="absolute bottom-0 left-7 w-20 -rotate-2 rounded-sm bg-white p-1.5 pb-4 shadow-md">
+            <div className="aspect-square rounded-[2px] bg-gradient-to-br from-burgundy/40 to-gold/40" />
+            <Tape className="-top-1.5 left-6 rotate-12" />
+          </div>
+        </div>
+      </MiniPage>
+
+      {/* the letter — kraft collage */}
+      <MiniPage
+        label="the letter you never sent"
+        bg="linear-gradient(160deg,#E2D3BD,#D2BD9F)"
+      >
+        <div className="relative flex-1 rounded-md bg-cream p-3 shadow-inner">
+          <Heart size={11} color="#A8323E" />
+          <p className="mt-1.5 font-serif text-[9px] italic text-ink/75">
+            Dear you,
+          </p>
+          <div className="mt-1.5 space-y-1">
+            {[90, 78, 86, 64, 82, 70, 50].map((w, i) => (
+              <div key={i} className="h-[3px] rounded-full bg-ink/12" style={{ width: `${w}%` }} />
+            ))}
+          </div>
+          <p className="mt-2 text-right font-serif text-[8px] italic text-ink/60">
+            with all our love —
+          </p>
+          <span className="absolute -bottom-1 right-2">
+            <Heart size={13} color="#A8323E" />
+          </span>
+        </div>
+      </MiniPage>
+    </div>
+  );
+}
+
+/* ---------- the keepsake cards ---------- */
+
+function RfidPair({ className = "" }: { className?: string }) {
+  return (
+    <div className={`relative h-44 w-72 ${className}`} aria-hidden>
+      <div className="absolute left-8 top-3 w-56 -rotate-2 rounded-2xl bg-ink p-4 opacity-50 shadow-lg" style={{ height: "10rem" }} />
+      <div className="absolute left-0 top-0 w-56 rotate-2 rounded-2xl bg-forest p-4 text-cream shadow-xl">
+        <div className="text-[9px] uppercase tracking-[0.25em] text-gold">
+          happy birthday
+        </div>
+        <div className="font-script text-2xl">to our favourite person</div>
+        <ul className="mt-2 space-y-1.5">
+          {QUALITIES.slice(0, 3).map((q) => (
+            <li key={q.word} className="flex items-center gap-2 text-xs text-cream/90">
+              <Heart size={10} color="#B8975A" /> {q.word} — {q.line}
+            </li>
+          ))}
+        </ul>
+        <div className="mt-3 flex items-center gap-1.5 text-[9px] text-cream/50">
+          <span className="inline-block h-3 w-3 rounded-[3px] border border-cream/50" />
+          tap on any phone — their page opens
+        </div>
+      </div>
     </div>
   );
 }
@@ -301,15 +446,15 @@ export default function Landing() {
         <Wordmark />
         <Link
           href="/begin"
-          className="rounded-full bg-burgundy px-5 py-2 text-sm text-canvas transition-opacity hover:opacity-90"
+          className="rounded-full bg-forest px-5 py-2 text-sm text-cream transition-opacity hover:opacity-90"
         >
           Begin a gift
         </Link>
       </header>
 
-      {/* Hero — the product itself, not a stock photo */}
+      {/* Hero — the actual card, the actual page */}
       <section className="px-6 pb-24 pt-12 md:px-12 md:pt-20">
-        <div className="mx-auto grid max-w-6xl items-center gap-14 md:grid-cols-2">
+        <div className="mx-auto grid max-w-6xl items-center gap-14 lg:grid-cols-2">
           <div>
             <motion.h1
               initial={{ opacity: 0, y: 24 }}
@@ -327,9 +472,9 @@ export default function Landing() {
               transition={{ duration: 0.7, delay: 0.15 }}
               className="mt-6 max-w-md text-lg leading-relaxed text-ink/70"
             >
-              A hardcover card that opens into an original song — written from
-              your memories, in their taste, living on a page that belongs to
-              one person only.
+              A hand-finished hardcover card — watercolour, aged paper,
+              polaroids — that opens into an original song written from your
+              memories. One tap, and their page begins to play.
             </motion.p>
             <motion.div
               initial={{ opacity: 0, y: 24 }}
@@ -339,7 +484,7 @@ export default function Landing() {
             >
               <Link
                 href="/begin"
-                className="rounded-full bg-burgundy px-8 py-3 text-canvas transition-opacity hover:opacity-90"
+                className="rounded-full bg-forest px-8 py-3 text-cream transition-opacity hover:opacity-90"
               >
                 Begin a gift
               </Link>
@@ -347,16 +492,15 @@ export default function Landing() {
             </motion.div>
           </div>
 
-          {/* card + phone composition */}
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.9, delay: 0.2 }}
-            className="relative mx-auto h-[480px] w-full max-w-md"
+            className="relative mx-auto h-[520px] w-full max-w-md"
           >
-            <CardPlaque className="absolute left-0 top-10 -rotate-6" />
-            <PhonePreview className="absolute right-0 top-0 md:right-2" />
-            <p className="absolute -bottom-1 right-4 max-w-[180px] text-right text-xs text-ink/40">
+            <CardCover className="absolute left-0 top-16 -rotate-3" />
+            <PhonePreview className="absolute -right-2 top-0 z-10 md:right-0" />
+            <p className="absolute bottom-2 right-4 max-w-[180px] text-right text-xs text-ink/40">
               the heart works. try it.
             </p>
           </motion.div>
@@ -368,7 +512,7 @@ export default function Landing() {
         <svg className="mx-auto w-full max-w-6xl" height="14" viewBox="0 0 1000 14" preserveAspectRatio="none">
           <path
             d="M0 7 L380 7 Q390 1 400 7 Q410 13 420 7 Q430 1 440 7 Q450 13 460 7 Q470 1 480 7 Q490 13 500 7 Q510 1 520 7 Q530 13 540 7 Q550 1 560 7 Q570 13 580 7 Q590 1 600 7 L1000 7"
-            stroke="#6B2737"
+            stroke="#3E5C45"
             strokeWidth="1"
             fill="none"
             opacity="0.5"
@@ -379,15 +523,15 @@ export default function Landing() {
       {/* Inside the card */}
       <section className="px-6 py-24 md:px-12">
         <motion.div {...reveal} className="text-center">
-          <p className="text-xs uppercase tracking-[0.25em] text-burgundy">
+          <p className="text-xs uppercase tracking-[0.25em] text-forest">
             the physical gift
           </p>
           <h2 className="mt-3 font-serif text-3xl md:text-4xl">
-            Four pages. One person on earth.
+            Every page, made for one person on earth
           </h2>
           <p className="mx-auto mt-4 max-w-lg text-ink/60">
-            A hardcover card in the language of album covers — because the
-            third page is one.
+            Watercolour botanicals, aged paper, polaroids and tape — and on the
+            song page, a QR that knows exactly who it belongs to.
           </p>
         </motion.div>
         <PagesOfTheCard />
@@ -400,36 +544,36 @@ export default function Landing() {
           <div className="max-w-xs text-center md:text-left">
             <h3 className="font-serif text-xl">And two cards to keep</h3>
             <p className="mt-3 text-sm leading-relaxed text-ink/60">
-              Spotify-style RFID cards. Each song title hints at a quality of
-              theirs — warmth, courage, mischief. One tap on a phone, and their
-              page opens.
+              A pair of keepsake RFID cards, each carrying the qualities that
+              make them <em>them</em>. Tap one on any phone — no app, no
+              login — and their page opens.
             </p>
           </div>
         </motion.div>
       </section>
 
-      {/* The moment — inverted, like the recipient page */}
+      {/* The moment — inverted, like the personal page */}
       <section className="bg-charcoal px-6 py-24 text-canvas md:px-12">
         <div className="mx-auto max-w-3xl text-center">
           <motion.p {...reveal} className="text-xs uppercase tracking-[0.25em] text-gold">
             the moment
           </motion.p>
           <motion.h2 {...reveal} className="mt-3 font-serif text-3xl md:text-4xl">
-            They scan. The room goes quiet.
+            They tap the card. The room goes quiet.
           </motion.h2>
           <motion.div {...reveal} className="mt-12 grid gap-8 text-left md:grid-cols-3">
             {[
               {
-                t: "Their name appears",
-                b: "In serif, on a near-black page. No login, no app, no banner. Just them.",
+                t: "One tap, or one scan",
+                b: "The RFID card on a phone, or the QR on the song page — both open the same address: a page with their name on it.",
               },
               {
                 t: "They tap the heart",
                 b: "“you're our favourite person.” Two seconds. Every single time they tap it.",
               },
               {
-                t: "The song begins",
-                b: "Their memories, set to music, in their taste — while your words and photos drift in below.",
+                t: "Their song begins",
+                b: "Your memories, set to music, in their taste — while your letter and photographs drift in below.",
               },
             ].map((s, i) => (
               <div key={s.t}>
@@ -442,8 +586,8 @@ export default function Landing() {
           <motion.div {...reveal} className="mt-14 flex justify-center">
             <Waveform bars={40} />
           </motion.div>
-          <motion.p {...reveal} className="mt-6 text-sm text-canvas/50">
-            The page stays up for years. Some gifts shouldn&rsquo;t expire.
+          <motion.p {...reveal} className="mt-6 inline-block rounded-full border border-canvas/15 px-4 py-1.5 text-xs text-canvas/50">
+            heartstrings.gift/for/your-person — theirs for years
           </motion.p>
         </div>
       </section>
@@ -461,7 +605,7 @@ export default function Landing() {
             },
             {
               title: "We craft their song & card",
-              body: "An original song written from your memories, in their music taste. You hear it and approve it before anything is printed.",
+              body: "An original song written from your memories, in their music taste — printed as lyrics on aged paper, with your letter and photographs. You approve everything first.",
             },
             {
               title: "They scan, they listen, they cry",
@@ -469,7 +613,7 @@ export default function Landing() {
             },
           ].map((s, i) => (
             <motion.div key={s.title} {...reveal}>
-              <div className="font-serif text-burgundy">0{i + 1}</div>
+              <div className="font-serif text-forest">0{i + 1}</div>
               <h3 className="mt-2 font-serif text-xl">{s.title}</h3>
               <p className="mt-3 text-sm leading-relaxed text-ink/70">{s.body}</p>
             </motion.div>
@@ -480,7 +624,7 @@ export default function Landing() {
       {/* Testimonial */}
       <section className="border-y border-taupe px-6 py-24 md:px-12">
         <motion.blockquote {...reveal} className="mx-auto max-w-2xl text-center">
-          <Heart size={20} />
+          <Heart size={20} color="#A8323E" />
           <p className="mt-6 font-serif text-2xl leading-relaxed md:text-3xl">
             &ldquo;She opened the card, scanned it, and by the second line of
             the song she was crying. I have never given a gift that did
@@ -500,7 +644,7 @@ export default function Landing() {
             {
               name: "Classic",
               price: "₹2,999",
-              lines: ["Hardcover card", "Their original song", "Their page, for years", "2 RFID cards + QR"],
+              lines: ["Hardcover card, hand-finished", "Their original song", "Their page, for years", "2 keepsake RFID cards + QR"],
               featured: false,
             },
             {
@@ -531,11 +675,11 @@ export default function Landing() {
                 </span>
               )}
               <h3 className="font-serif text-xl">{t.name}</h3>
-              <div className="mt-3 font-serif text-3xl text-burgundy">{t.price}</div>
+              <div className="mt-3 font-serif text-3xl text-forest">{t.price}</div>
               <ul className="mt-5 space-y-2 text-sm text-ink/70">
                 {t.lines.map((l) => (
                   <li key={l} className="flex gap-2">
-                    <span className="text-burgundy">·</span> {l}
+                    <span className="text-forest">·</span> {l}
                   </li>
                 ))}
               </ul>
@@ -543,8 +687,8 @@ export default function Landing() {
                 href="/begin"
                 className={`mt-8 block rounded-full py-2.5 text-center text-sm transition-opacity hover:opacity-90 ${
                   t.featured
-                    ? "bg-burgundy text-canvas"
-                    : "border border-taupe hover:border-burgundy"
+                    ? "bg-forest text-cream"
+                    : "border border-taupe hover:border-forest"
                 }`}
               >
                 Begin a gift
@@ -564,7 +708,7 @@ export default function Landing() {
             <details key={f.q} className="group py-4">
               <summary className="flex cursor-pointer list-none items-center justify-between font-medium">
                 {f.q}
-                <span className="text-burgundy transition-transform group-open:rotate-45">+</span>
+                <span className="text-forest transition-transform group-open:rotate-45">+</span>
               </summary>
               <p className="mt-2 text-sm leading-relaxed text-ink/70">{f.a}</p>
             </details>
@@ -574,7 +718,10 @@ export default function Landing() {
 
       {/* Closing */}
       <section className="bg-ink px-6 py-24 text-center text-canvas md:px-12">
-        <motion.h2 {...reveal} className="mx-auto max-w-xl font-serif text-3xl leading-snug md:text-4xl">
+        <motion.p {...reveal} className="font-script text-3xl text-gold">
+          Happy Birthday
+        </motion.p>
+        <motion.h2 {...reveal} className="mx-auto mt-4 max-w-xl font-serif text-3xl leading-snug md:text-4xl">
           Somebody&rsquo;s birthday is coming.
           <br />
           You already know whose.
@@ -582,7 +729,7 @@ export default function Landing() {
         <motion.div {...reveal}>
           <Link
             href="/begin"
-            className="mt-10 inline-block rounded-full bg-canvas px-8 py-3 text-ink transition-opacity hover:opacity-90"
+            className="mt-10 inline-block rounded-full bg-cream px-8 py-3 text-ink transition-opacity hover:opacity-90"
           >
             Begin a gift
           </Link>

@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Fraunces, Inter } from "next/font/google";
+import { Fraunces, Inter, Great_Vibes } from "next/font/google";
 import "./globals.css";
 
 const fraunces = Fraunces({
@@ -11,6 +11,15 @@ const fraunces = Fraunces({
 const inter = Inter({
   subsets: ["latin"],
   variable: "--font-inter",
+  display: "swap",
+});
+
+// The calligraphy voice of the printed card ("Happy Birthday", "Favourite
+// Memories") — used sparingly, only where the physical product speaks.
+const greatVibes = Great_Vibes({
+  weight: "400",
+  subsets: ["latin"],
+  variable: "--font-script",
   display: "swap",
 });
 
@@ -26,7 +35,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`${fraunces.variable} ${inter.variable}`}>
+    <html
+      lang="en"
+      className={`${fraunces.variable} ${inter.variable} ${greatVibes.variable}`}
+    >
       <body className="font-sans">{children}</body>
     </html>
   );

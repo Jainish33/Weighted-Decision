@@ -11,10 +11,17 @@ const config: Config = {
         taupe: "#D8CFC4",
         gold: "#B8975A",
         charcoal: "#211C18",
+        // The physical card's palette: botanical greens, aged paper, kraft.
+        forest: "#3E5C45",
+        sage: "#8AA38D",
+        cream: "#F3ECDD",
+        paper: "#EBDCBE",
+        kraft: "#C2A582",
       },
       fontFamily: {
         serif: ["var(--font-fraunces)", "Georgia", "serif"],
         sans: ["var(--font-inter)", "system-ui", "sans-serif"],
+        script: ["var(--font-script)", "cursive"],
       },
       keyframes: {
         fadeUp: {
