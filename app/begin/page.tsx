@@ -66,6 +66,7 @@ function BeginInner() {
   const [occasion, setOccasion] = useState("");
   const [deliveryDate, setDeliveryDate] = useState("");
   const [city, setCity] = useState("");
+  const [pincode, setPincode] = useState("");
   const [tier, setTier] = useState(initialTier);
   const [note, setNote] = useState("");
   const [submitted, setSubmitted] = useState(false);
@@ -77,7 +78,8 @@ function BeginInner() {
     relationship &&
     occasion &&
     deliveryDate &&
-    city.trim();
+    city.trim() &&
+    pincode.trim().length === 6;
 
   const daysAway = deliveryDate
     ? Math.floor((new Date(deliveryDate).getTime() - Date.now()) / 86_400_000)
@@ -91,7 +93,7 @@ function BeginInner() {
         `For: ${recipientName || "—"} (my ${relationship || "—"})`,
         `Occasion: ${occasion || "—"}`,
         `Needed by: ${deliveryDate || "—"}`,
-        `Deliver to: ${city || "—"}`,
+        `Deliver to: ${city || "—"}${pincode ? ` - ${pincode}` : ""}`,
         `Gift: ${tierLabel(tier)}`,
         "",
         `From: ${gifterName || "—"}`,
@@ -99,7 +101,7 @@ function BeginInner() {
       ]
         .filter(Boolean)
         .join("\n"),
-    [recipientName, relationship, occasion, deliveryDate, city, tier, gifterName, note],
+    [recipientName, relationship, occasion, deliveryDate, city, pincode, tier, gifterName, note],
   );
 
   function submit() {
@@ -114,6 +116,7 @@ function BeginInner() {
       occasion,
       deliveryDate,
       city: city.trim(),
+      pincode: pincode.trim(),
       tier,
       note: note.trim(),
     };
@@ -295,23 +298,36 @@ function BeginInner() {
             </div>,
           )}
 
+          {field(
+            "in their hands by",
+            <input
+              type="date"
+              min={today()}
+              value={deliveryDate}
+              onChange={(e) => setDeliveryDate(e.target.value)}
+              className={inputClass}
+            />,
+          )}
+
           <div className="grid gap-8 sm:grid-cols-2">
-            {field(
-              "in their hands by",
-              <input
-                type="date"
-                min={today()}
-                value={deliveryDate}
-                onChange={(e) => setDeliveryDate(e.target.value)}
-                className={inputClass}
-              />,
-            )}
             {field(
               "delivery city",
               <input
                 value={city}
                 onChange={(e) => setCity(e.target.value)}
                 placeholder="city"
+                className={inputClass}
+              />,
+            )}
+            {field(
+              "pincode",
+              <input
+                value={pincode}
+                onChange={(e) =>
+                  setPincode(e.target.value.replace(/\D/g, "").slice(0, 6))
+                }
+                placeholder="6-digit pincode"
+                inputMode="numeric"
                 className={inputClass}
               />,
             )}

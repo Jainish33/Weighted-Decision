@@ -424,7 +424,7 @@ function RfidPair({ className = "" }: { className?: string }) {
 const FAQS = [
   {
     q: "How long does it take?",
-    a: "Most gifts are in their hands within 7 days. We confirm your date before you pay — we never accept an order we can't deliver.",
+    a: "We confirm your delivery date with you before we begin — and we only take on a gift when we're sure we can make it beautiful in time.",
   },
   {
     q: "What if I don't know their music taste?",
@@ -432,7 +432,7 @@ const FAQS = [
   },
   {
     q: "How long does their page stay up?",
-    a: "A minimum of five years, and we intend forever. Permanence is part of the gift.",
+    a: "On Signature and above, their personal page stays live for a year. Classic gifts come with the song as an MP3.",
   },
   {
     q: "Can I hear the song before it ships?",
@@ -511,11 +511,11 @@ export default function Landing() {
               transition={{ duration: 0.7, delay: 0.45 }}
               className="mt-6 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs uppercase tracking-[0.16em] text-ink/45"
             >
+              <span>Hand-finished</span>
+              <span className="text-gold">·</span>
               <span>Made to order</span>
               <span className="text-gold">·</span>
               <span>Pan-India</span>
-              <span className="text-gold">·</span>
-              <span>In their hands in 7 days</span>
             </motion.p>
           </div>
 
@@ -614,7 +614,7 @@ export default function Landing() {
             <Waveform bars={40} />
           </motion.div>
           <motion.p {...reveal} className="mt-6 inline-block rounded-full border border-canvas/15 px-4 py-1.5 text-xs text-canvas/50">
-            heartstrings.gift/for/your-person — theirs for years
+            heartstrings.gift/for/your-person — hosted for a year
           </motion.p>
         </div>
       </section>

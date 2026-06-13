@@ -14,6 +14,7 @@ export interface Lead {
   occasion: string;
   deliveryDate: string;
   city: string;
+  pincode: string;
   tier: string;
   note: string;
 }

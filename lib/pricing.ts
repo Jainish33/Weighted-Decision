@@ -20,7 +20,7 @@ export const TIERS: PublicTier[] = [
     includes: [
       "Hardcover card, hand-finished",
       "An original song written from your memories",
-      "Their personal page + QR, hosted for years",
+      "Your song delivered as an MP3",
     ],
   },
   {
@@ -31,6 +31,7 @@ export const TIERS: PublicTier[] = [
     featured: true,
     includes: [
       "Everything in Classic",
+      "Their personal page + QR, hosted for a year",
       "2 keepsake RFID cards",
       "One song revision",
     ],
