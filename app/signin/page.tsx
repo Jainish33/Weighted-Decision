@@ -9,8 +9,44 @@ import {
   signInWithPopup,
   type ConfirmationResult,
 } from "firebase/auth";
+import Link from "next/link";
 import Wordmark from "@/components/Wordmark";
 import { firebaseAuth, firebaseConfigured } from "@/lib/firebase";
+import { STUDIO_ENABLED, whatsappLink } from "@/lib/config";
+
+// v1: the self-serve studio is invitation-only. When STUDIO_ENABLED flips on
+// in v2, the full phone/Google sign-in below takes over.
+function ComingSoonWall() {
+  return (
+    <main className="flex min-h-screen flex-col bg-canvas text-ink">
+      <header className="border-b border-gold/30 px-6 py-5 md:px-12">
+        <Wordmark />
+      </header>
+      <div className="mx-auto flex max-w-md flex-1 flex-col justify-center px-6 text-center">
+        <p className="font-script text-3xl text-forest">by invitation</p>
+        <h1 className="mt-3 font-serif text-3xl">The studio opens soon</h1>
+        <p className="mt-4 text-ink/60">
+          For now, every gift is crafted personally — hand to hand. Tell us
+          about your favourite person and we&rsquo;ll begin together.
+        </p>
+        <Link
+          href="/begin"
+          className="mt-8 inline-block rounded-full bg-forest px-8 py-3 text-cream transition-opacity hover:opacity-90"
+        >
+          Begin a gift
+        </Link>
+        <a
+          href={whatsappLink("Hi Heart Strings — I'd like to begin a gift.")}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="mt-4 text-sm text-ink/50 underline-offset-4 hover:underline"
+        >
+          or message us on WhatsApp
+        </a>
+      </div>
+    </main>
+  );
+}
 
 function SignInInner() {
   const router = useRouter();
@@ -67,6 +103,9 @@ function SignInInner() {
       setError("Google sign-in didn't go through. Try the phone number.");
     }
   }
+
+  // Gated in v1 — the sign-in UI below is preserved for v2.
+  if (!STUDIO_ENABLED) return <ComingSoonWall />;
 
   return (
     <main className="min-h-screen bg-canvas text-ink">

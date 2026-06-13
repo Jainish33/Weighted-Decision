@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { AnimatePresence, motion } from "framer-motion";
 import Wordmark from "@/components/Wordmark";
+import { TIERS, CARD_ONLY } from "@/lib/pricing";
 
 /* ---------- shared bits ---------- */
 
@@ -442,24 +443,38 @@ const FAQS = [
 export default function Landing() {
   return (
     <main className="min-h-screen overflow-x-hidden bg-canvas text-ink">
-      <header className="flex items-center justify-between px-6 py-5 md:px-12">
+      <header className="flex items-center justify-between border-b border-gold/30 px-6 py-5 md:px-12">
         <Wordmark />
-        <Link
-          href="/begin"
-          className="rounded-full bg-forest px-5 py-2 text-sm text-cream transition-opacity hover:opacity-90"
-        >
-          Begin a gift
-        </Link>
+        <div className="flex items-center gap-5">
+          <span className="hidden text-xs uppercase tracking-[0.22em] text-ink/40 sm:inline">
+            by appointment
+          </span>
+          <Link
+            href="/begin"
+            className="rounded-full bg-forest px-5 py-2 text-sm text-cream transition-opacity hover:opacity-90"
+          >
+            Begin a gift
+          </Link>
+        </div>
       </header>
 
       {/* Hero — the actual card, the actual page */}
       <section className="px-6 pb-24 pt-12 md:px-12 md:pt-20">
         <div className="mx-auto grid max-w-6xl items-center gap-14 lg:grid-cols-2">
           <div>
-            <motion.h1
+            <motion.p
               initial={{ opacity: 0, y: 24 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7 }}
+              className="mb-5 flex items-center gap-3 text-xs uppercase tracking-[0.22em] text-forest"
+            >
+              <span className="h-px w-8 bg-gold" />
+              Handcrafted to order
+            </motion.p>
+            <motion.h1
+              initial={{ opacity: 0, y: 24 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7, delay: 0.08 }}
               className="font-serif text-5xl leading-[1.08] md:text-6xl lg:text-7xl"
             >
               Some feelings
@@ -488,8 +503,20 @@ export default function Landing() {
               >
                 Begin a gift
               </Link>
-              <span className="text-sm text-ink/50">from ₹2,999 · 7 days</span>
+              <span className="text-sm text-ink/50">from ₹1,700</span>
             </motion.div>
+            <motion.p
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.7, delay: 0.45 }}
+              className="mt-6 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs uppercase tracking-[0.16em] text-ink/45"
+            >
+              <span>Made to order</span>
+              <span className="text-gold">·</span>
+              <span>Pan-India</span>
+              <span className="text-gold">·</span>
+              <span>In their hands in 7 days</span>
+            </motion.p>
           </div>
 
           <motion.div
@@ -636,34 +663,22 @@ export default function Landing() {
 
       {/* Pricing */}
       <section className="px-6 py-24 md:px-12">
-        <motion.h2 {...reveal} className="text-center font-serif text-3xl md:text-4xl">
-          One gift, three ways
-        </motion.h2>
+        <motion.div {...reveal} className="text-center">
+          <p className="flex items-center justify-center gap-3 text-xs uppercase tracking-[0.22em] text-forest">
+            <span className="h-px w-8 bg-gold" />
+            the collection
+            <span className="h-px w-8 bg-gold" />
+          </p>
+          <h2 className="mt-3 font-serif text-3xl md:text-4xl">
+            One gift, three ways
+          </h2>
+        </motion.div>
         <div className="mx-auto mt-14 grid max-w-5xl gap-6 md:grid-cols-3">
-          {[
-            {
-              name: "Classic",
-              price: "₹2,999",
-              lines: ["Hardcover card, hand-finished", "Their original song", "Their page, for years", "2 keepsake RFID cards + QR"],
-              featured: false,
-            },
-            {
-              name: "Signature",
-              price: "₹4,499",
-              lines: ["Everything in Classic", "Premium gift box", "One song revision", "Guestbook for friends", "Scented pages"],
-              featured: true,
-            },
-            {
-              name: "Together",
-              price: "₹5,999",
-              lines: ["Everything in Signature", "Friends add memories via a link", "One song, many voices", "Group messages on the page"],
-              featured: false,
-            },
-          ].map((t) => (
+          {TIERS.map((t) => (
             <motion.div
-              key={t.name}
+              key={t.id}
               {...reveal}
-              className={`relative rounded-2xl border p-8 ${
+              className={`relative flex flex-col rounded-2xl border p-8 ${
                 t.featured
                   ? "border-gold bg-white shadow-lg"
                   : "border-taupe bg-white/40"
@@ -675,16 +690,19 @@ export default function Landing() {
                 </span>
               )}
               <h3 className="font-serif text-xl">{t.name}</h3>
-              <div className="mt-3 font-serif text-3xl text-forest">{t.price}</div>
+              <p className="mt-1 text-xs italic text-ink/45">{t.tagline}</p>
+              <div className="mt-3 font-serif text-3xl text-forest">
+                ₹{t.price.toLocaleString("en-IN")}
+              </div>
               <ul className="mt-5 space-y-2 text-sm text-ink/70">
-                {t.lines.map((l) => (
+                {t.includes.map((l) => (
                   <li key={l} className="flex gap-2">
-                    <span className="text-forest">·</span> {l}
+                    <span className="text-gold">·</span> {l}
                   </li>
                 ))}
               </ul>
               <Link
-                href="/begin"
+                href={`/begin?tier=${t.id}`}
                 className={`mt-8 block rounded-full py-2.5 text-center text-sm transition-opacity hover:opacity-90 ${
                   t.featured
                     ? "bg-forest text-cream"
@@ -696,6 +714,15 @@ export default function Landing() {
             </motion.div>
           ))}
         </div>
+        <motion.p {...reveal} className="mt-8 text-center text-sm text-ink/50">
+          {CARD_ONLY.note} —{" "}
+          <Link
+            href={`/begin?tier=${CARD_ONLY.id}`}
+            className="text-forest underline-offset-4 hover:underline"
+          >
+            {CARD_ONLY.name}, ₹{CARD_ONLY.price}
+          </Link>
+        </motion.p>
       </section>
 
       {/* FAQ */}
